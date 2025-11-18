@@ -2,6 +2,7 @@ import express, { json } from "express";
 import multer from "multer";
 import UserSchema from "./userSchema.js";
 import bcrypt from "bcrypt";
+import route from "./ProductRoute.js";
 const routes = express.Router();
 
 
@@ -78,6 +79,14 @@ routes.get('/userInfo', (req, res) => {
         return res.status(200).json({ userInfo: req.session.user })
     }
     return res.status(401).json("Not logged in")
+});
+
+
+routes.post('/logout', async(req, res) => {
+    req.session.destroy((err) => {
+        if (err) throw err
+        console.log('Logged out')
+    })
 });
 
 routes.post('/cart/add', async(req, res) => {

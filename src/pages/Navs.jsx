@@ -33,6 +33,7 @@ const Navs = () => {
       await axios.post("http://localhost:5000/user/logout", {}, { withCredentials: true });
       setUserInfo(null);
       navigate("/sign-up");
+      alert('Logged out successfully')
     } catch (err) {
       console.error("Logout failed:", err.message);
     }
