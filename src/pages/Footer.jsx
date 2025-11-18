@@ -53,10 +53,10 @@ const Footer = () => {
                 <div className="space-y-6">
                     <h1 className="text-xl font-semibold border-l-4 border-purple-500 pl-3">Quick Links</h1>
                     <div className="space-y-3 text-gray-300">
-                        <Link className="block hover:text-white hover:translate-x-2 transform duration-200 transition-all" to="/terms">
+                        <Link className="block hover:text-green-500 hover:translate-x-2 transform duration-200 transition-all" to="/terms">
                             Terms of Use
                         </Link>
-                        <Link className="block hover:text-white hover:translate-x-2 transform duration-200 transition-all" to="/contact">
+                        <Link className="block hover:text-green-500 hover:translate-x-2 transform duration-200 transition-all" to="/contact">
                             Contact Us
                         </Link>
                         <Link className="block hover:text-white hover:translate-x-2 transform duration-200 transition-all" to="/about">
