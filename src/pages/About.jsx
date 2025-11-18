@@ -268,26 +268,26 @@ const AboutUs = () => {
           <div className="grid grid-cols-1 gap-8 hover:translate-y-2 transition duration-200">
             {teamMembers.map((member, index) => (
               <div key={index} className="group">
-                <div className="flex flex-col lg:flex-row items-center gap-12 p-12 bg-gray-50 rounded-3xl border border-gray-200 hover:border-gray-300 transition-all duration-500">
-                  <img src={github} className="w-48 h-48 rounded-3xl bg-gray-900 flex items-center justify-center text-white text-5xl font-black shadow-2xl group-hover:scale-105 transition-transform duration-300" />
+                <div className="flex flex-col lg:flex-row items-center gap-12 p-12 rounded-3xl border border-white hover:border-gray-300 transition-all duration-500">
+                  <img src={github} className="w-48 h-48 rounded-3xl  flex items-center justify-center text-white text-5xl font-black shadow-2xl group-hover:scale-105 transition-transform duration-300" />
                   
                   <div className="flex-1 text-center lg:text-left">
-                    <h3 className="text-3xl font-black text-gray-900 mb-3">{member.name}</h3>
-                    <div className="text-gray-600 text-xl font-bold mb-4">{member.role}</div>
-                    <div className="text-lg text-gray-500 italic mb-6">"{member.quote}"</div>
+                    <h3 className="text-3xl font-black text-white mb-3">{member.name}</h3>
+                    <div className="text-white text-xl font-bold mb-4">{member.role}</div>
+                    <div className="text-lg text-white italic mb-6">"{member.quote}"</div>
                     
                     <div className="flex flex-wrap gap-3 justify-center lg:justify-start mb-6">
                       {member.specialties.map((skill, skillIndex) => (
                         <span 
                           key={skillIndex}
-                          className="px-4 py-2 bg-white border border-gray-300 rounded-full text-gray-700 text-sm font-medium hover:bg-gray-100 transition-colors duration-300"
+                          className="px-4 py-2  border border-gray-300 rounded-full text-white text-sm font-medium hover:bg-white hover:text-green-500 transition-colors duration-300"
                         >
                           {skill}
                         </span>
                       ))}
                     </div>
                     
-                    <p className="text-gray-600 text-lg leading-relaxed">
+                    <p className="text-white text-lg leading-relaxed">
                       Passionate about creating digital experiences that blend cutting-edge technology 
                       with intuitive design. Every feature in ShopSphere is crafted with attention to 
                       detail and user experience in mind.
