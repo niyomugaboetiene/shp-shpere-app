@@ -280,7 +280,7 @@ const AboutUs = () => {
                       {member.specialties.map((skill, skillIndex) => (
                         <span 
                           key={skillIndex}
-                          className="px-4 py-2  border border-gray-300 rounded-full text-white text-sm font-medium hover:bg-white hover:text-green-500 transition-colors duration-300"
+                          className="px-4 py-2  border border-gray-300 rounded-full text-white text-sm font-medium hover:bg-white hover:text-green-500 transition duration-300 hover:translate-y-1"
                         >
                           {skill}
                         </span>
