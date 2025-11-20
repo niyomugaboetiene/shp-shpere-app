@@ -88,7 +88,6 @@ const Home = () => {
       )}
 
       <div className="flex flex-col md:flex-row w-full gap-6 md:gap-8">
-        {/* Sidebar */}
         <div className="w-full md:w-1/4 border-b-2 md:border-b-0 md:border-r-2 border-gray-200 pb-4 md:pb-0 pr-0 md:pr-6">
           <div className="flex md:hidden justify-between items-center mb-4">
             <h2 className="text-xl font-semibold text-gray-700">Categories</h2>
