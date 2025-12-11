@@ -44,7 +44,7 @@ const Home = () => {
 
   const fetchCurrentUser = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/user/userInfo", {
+      const res = await axios.get("https://shp-shpere-app-1.onrender.com/user/userInfo", {
         withCredentials: true,
       });
       setCurrentUser(res.data.userInfo);

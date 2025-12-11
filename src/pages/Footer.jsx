@@ -6,7 +6,7 @@ const Footer = () => {
         <footer className="bg-black text-white">
             <div className="mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
                 <div className="space-y-6">
-                    <h1 className="text-3xl font-bold bg-gradient-to-r from-green-400 to-green-700 bg-clip-text text-transparent">
+                    <h1 className="text-3xl font-bold bg-linear-to-r from-green-400 to-green-700 bg-clip-text text-transparent">
                         Shop Sphere
                     </h1>
                     <div className="space-y-3">
@@ -15,7 +15,7 @@ const Footer = () => {
                             className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-200 placeholder-gray-400" 
                             placeholder="Enter your email"
                         />
-                        <button className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-200 transform hover:scale-105 font-medium shadow-lg">
+                        <button className="w-full bg-linear-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-200 transform hover:scale-105 font-medium shadow-lg">
                             Subscribe
                         </button>
                     </div>

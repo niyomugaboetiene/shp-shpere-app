@@ -17,7 +17,7 @@ const OurProduct = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/product/getProduct", {
+        const res = await axios.get("https://shp-shpere-app-1.onrender.com/product/getProduct", {
           withCredentials: true,
         });
         setProducts(res.data.products);
@@ -40,7 +40,7 @@ const OurProduct = () => {
 
   const fetchUserCart = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/product/cart", {
+      const res = await axios.get("https://shp-shpere-app-1.onrender.com/product/cart", {
         withCredentials: true,
       });
       setUserCart(res.data.cart || []);
@@ -53,7 +53,7 @@ const OurProduct = () => {
     try {
       setIsLoading(true);
       await axios.post(
-        `http://localhost:5000/product/cart/add/${product_id}`,
+        `https://shp-shpere-app-1.onrender.com/product/cart/add/${product_id}`,
         { quality: 1 },
         { withCredentials: true }
       );
@@ -75,7 +75,7 @@ const OurProduct = () => {
 
   const fetchCurrentUser = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/user/userInfo", {
+      const res = await axios.get("https://shp-shpere-app-1.onrender.com/user/userInfo", {
         withCredentials: true,
       });
       setCurrentUser(res.data.userInfo);
@@ -90,7 +90,7 @@ const OurProduct = () => {
       const confirmDelete = window.confirm("You want to delete this product ?");
       if (!confirmDelete) return;
       setIsLoading(true);
-      await axios.delete(`http://localhost:5000/product/delete/${product_id}`, {
+      await axios.delete(`https://shp-shpere-app-1.onrender.com/product/delete/${product_id}`, {
         withCredentials: true,
       });
       setIsLoading(false);
@@ -134,7 +134,7 @@ const OurProduct = () => {
           >
             <div className="relative w-full h-72 overflow-hidden rounded-lg mb-4">
               <img
-                src={`http://localhost:5000/${item.image}`}
+                src={`https://shp-shpere-app-1.onrender.com/${item.image}`}
                 className="w-full h-full object-cover hover:scale-110 transition duration-300"
               />
 
