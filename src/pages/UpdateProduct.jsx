@@ -26,7 +26,7 @@ const UpdateProduct = () => {
            formData.append('stock', stock);
            if (image) formData.append('image', image);
 
-           await axios.put(`http://localhost:5000/product/update/${product_id}`, formData, {
+           await axios.put(`https://shp-shpere-app-1.onrender.com/product/update/${product_id}`, formData, {
             withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } });
             
            setIsLoading(false);
@@ -48,7 +48,7 @@ const UpdateProduct = () => {
     useEffect(() => {
         const GetCurrentProduct = async() => {
             try {
-               const res = await axios.get(`http://localhost:5000/product/getProduct/${product_id}`);
+               const res = await axios.get(`https://shp-shpere-app-1.onrender.com/product/getProduct/${product_id}`);
                setCurrentProduct(res.data.product);
             } catch (error){
                  const errorMessage = error.message;

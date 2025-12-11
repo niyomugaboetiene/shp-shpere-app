@@ -15,7 +15,7 @@ const SpecificUpdation = () => {
            const formData = new FormData();
            if (image) formData.append('image', image);
 
-           await axios.put(`http://localhost:5000/product/update/${product_id}`, formData, {
+           await axios.put(`https://shp-shpere-app-1.onrender.com/product/update/${product_id}`, formData, {
             withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } });
             
            setIsLoading(false);

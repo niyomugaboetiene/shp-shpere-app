@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:5000/product";
+const BASE_URL = "https://shp-shpere-app-1.onrender.com/product";
 
 export const searchProducts = async (query, category = "") => {
   try {
