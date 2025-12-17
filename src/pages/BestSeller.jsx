@@ -15,7 +15,7 @@ const BestSeller = () => {
     useEffect(() => {
         try {
             const GetBestSold = async () => {
-                const product = await axios.get('https://shp-shpere-app-1.onrender.com/product/best-sold', { withCredentials: true });
+                const product = await axios.get('http://localhost:5000/product/best-sold', { withCredentials: true });
                 setProducts(product.data.products);
             };
             GetBestSold();
@@ -26,7 +26,7 @@ const BestSeller = () => {
 
     const AddToCart = async(product_id) => {
         try {
-            await axios.post(`https://shp-shpere-app-1.onrender.com/product/cart/add/${product_id}`, { quality: 1 }, { withCredentials: true });
+            await axios.post(`http://localhost:5000/product/cart/add/${product_id}`, { quality: 1 }, { withCredentials: true });
             setCartMessage(true);
             setTimeout(() => {
                 setCartMessage("");
@@ -42,7 +42,7 @@ const BestSeller = () => {
 
 const fetchUserCart = async () => {
   try {
-    const res = await axios.get("https://shp-shpere-app-1.onrender.com/product/cart", {
+    const res = await axios.get("http://localhost:5000/product/cart", {
       withCredentials: true,
     });
     setUserCart(res.data.cart || []);
@@ -83,7 +83,7 @@ useEffect(() => {
                     >
                         <div className="relative w-full h-72 overflow-hidden rounded-lg mb-4">
                             <img
-                                src={`https://shp-shpere-app-1.onrender.com/${item.image}`}
+                                src={`http://localhost:5000/${item.image}`}
                                 className="w-full h-full object-cover hover:scale-110 transition duration-300"
                             />
 

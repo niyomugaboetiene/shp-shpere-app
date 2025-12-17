@@ -13,7 +13,7 @@ const CartPage = () => {
     const fetchCart = async () => {
       try {
         setIsLoading(true);
-        const res = await axios.get("https://shp-shpere-app-1.onrender.com/product/cart", {
+        const res = await axios.get("http://localhost:5000/product/cart", {
           withCredentials: true,
         });
         setCartItems(res.data.cart);
@@ -31,7 +31,7 @@ const CartPage = () => {
   const removeFromCart = async (product_id) => {
     try {
       await axios.post(
-        "https://shp-shpere-app-1.onrender.com/product/cart/remove",
+        "http://localhost:5000/product/cart/remove",
         { product_id },
         { withCredentials: true }
       );
@@ -47,7 +47,7 @@ const CartPage = () => {
     
     try {
       await axios.put(
-        `https://shp-shpere-app-1.onrender.com/product/updates/${product_id}`,
+        `http://localhost:5000/product/updates/${product_id}`,
         { quality: newQuantity },
         { withCredentials: true }
       );
@@ -113,7 +113,7 @@ const CartPage = () => {
               <div key={item.product_id} className="grid grid-cols-12 gap-4 items-center px-6 py-6 hover:bg-gray-50 transition-colors duration-200">
                 <div className="col-span-5 flex items-center space-x-4">
                   <img
-                    src={`https://shp-shpere-app-1.onrender.com/${item.image}`}
+                    src={`http://localhost:5000/${item.image}`}
                     alt={item.product_name}
                     className="w-20 h-20 object-cover rounded-xl shadow-md"
                   />

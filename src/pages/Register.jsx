@@ -23,7 +23,7 @@ const RegisterAccount = () => {
         formData.append("image", image);
         try {
             setIsLoading(true);
-            await axios.post('https://shp-shpere-app-1.onrender.com/user/register', formData, {
+            await axios.post('http://localhost:5000/user/register', formData, {
                 withCredentials: true,
                headers: { "Content-Type": "multipart/form-data" },
             });
