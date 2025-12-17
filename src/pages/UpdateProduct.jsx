@@ -27,7 +27,7 @@ const UpdateProduct = () => {
            formData.append('stock', stock);
            if (image) formData.append('image', image);
 
-           await axios.put(`BACKEND_URL/product/update/${product_id}`, formData, {
+           await axios.put(`${BACKEND_URL}/product/update/${product_id}`, formData, {
             withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } });
             
            setIsLoading(false);
@@ -49,7 +49,7 @@ const UpdateProduct = () => {
     useEffect(() => {
         const GetCurrentProduct = async() => {
             try {
-               const res = await axios.get(`BACKEND_URL/product/getProduct/${product_id}`);
+               const res = await axios.get(`${BACKEND_URL}/product/getProduct/${product_id}`);
                setCurrentProduct(res.data.product);
             } catch (error){
                  const errorMessage = error.message;

@@ -16,7 +16,7 @@ const SpecificUpdation = () => {
            const formData = new FormData();
            if (image) formData.append('image', image);
 
-           await axios.put(`BACKEND_URL/product/update/${product_id}`, formData, {
+           await axios.put(`${BACKEND_URL}/product/update/${product_id}`, formData, {
             withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } });
             
            setIsLoading(false);
