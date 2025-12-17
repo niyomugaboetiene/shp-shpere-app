@@ -11,6 +11,7 @@ const LoginAccount = () => {
     const navigate = useNavigate();
 
     const Login = async() => {
+        // console.log("Name", user_name, "password", password);
         if (!user_name || !password) {
             alert("All fields are required");
             return;
