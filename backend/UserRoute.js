@@ -3,45 +3,97 @@ import multer from "multer";
 import UserSchema from "./userSchema.js";
 import bcrypt from "bcrypt";
 import route from "./ProductRoute.js";
+import { v2 as cloudinary } from "cloudinary";
+
 const routes = express.Router();
 
+// Configure Cloudinary
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'User_Image/');
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + '-' + file.originalname); // * to avoid duplicates
+// Configure multer for memory storage (no local disk storage)
+const storage = multer.memoryStorage();
+const uploads = multer({ 
+    storage,
+    limits: {
+        fileSize: 5 * 1024 * 1024 // 5MB limit
     }
-})  
+});
 
-const uploads = multer({ storage });
-
-routes.post('/register', uploads.single('image'), async(req, res) => {
-    try {
-    const { user_name, password, image } = req.body;
-    const isExist = await UserSchema.findOne({ user_name });
+// Helper function to upload to Cloudinary
+const uploadToCloudinary = (fileBuffer, fileName) => {
+    return new Promise((resolve, reject) => {
+        // Convert buffer to base64
+        const b64 = Buffer.from(fileBuffer).toString('base64');
+        const dataURI = `data:image/jpeg;base64,${b64}`; // Adjust mime type as needed
         
+        cloudinary.uploader.upload(dataURI, {
+            folder: 'ecommerce-app/users',
+            public_id: fileName.split('.')[0], // Remove extension
+            overwrite: false
+        }, (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+        });
+    });
+};
 
-    const salt =  await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    const ImagePath = req.file ? req.file.path : null;
-   
-    if (!user_name || !password || !ImagePath) {
-        res.status(400).json({ message: 'Missing dependecies' });
-    }
-    if (isExist) {
-        return res.status(409).json({ message: 'username already taken' });
-    }
+routes.post('/register', uploads.single('image'), async (req, res) => {
+    try {
+        const { user_name, password } = req.body;
+        
+        // Validation
+        if (!user_name || !password) {
+            return res.status(400).json({ message: 'Username and password are required' });
+        }
+        
+        if (!req.file) {
+            return res.status(400).json({ message: 'Profile image is required' });
+        }
+        
+        // Check if user exists
+        const isExist = await UserSchema.findOne({ user_name });
+        if (isExist) {
+            return res.status(409).json({ message: 'Username already taken' });
+        }
+        
+        // Hash password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+        
+        // Upload image to Cloudinary
+        let cloudinaryResult;
+        try {
+            cloudinaryResult = await uploadToCloudinary(
+                req.file.buffer,
+                `${Date.now()}-${req.file.originalname}`
+            );
+        } catch (uploadError) {
+            console.error('Cloudinary upload error:', uploadError);
+            return res.status(500).json({ message: 'Failed to upload image' });
+        }
+        
+        // Create user with Cloudinary URL
         await UserSchema.create({
-            user_name, password: hashedPassword, image: ImagePath
+            user_name,
+            password: hashedPassword,
+            image: cloudinaryResult.secure_url, // Cloudinary URL
+            cloudinary_public_id: cloudinaryResult.public_id // Store public_id for future deletion
         });
         
-        return res.status(201).json({ message: 'User registered successfully' });
-    } catch(error) {
-         res.status(500).json({message: 'Database error'});
+        return res.status(201).json({ 
+            message: 'User registered successfully',
+            imageUrl: cloudinaryResult.secure_url
+        });
+        
+    } catch (error) {
+        console.error('Registration error:', error);
+        return res.status(500).json({ message: 'Database error' });
     }      
-})
+});
 
 routes.post('/login', async (req, res) => {
     const { user_name, password } = req.body;
