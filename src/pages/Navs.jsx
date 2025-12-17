@@ -17,7 +17,7 @@ const Navs = () => {
     const GetUserInfo = async () => {
       try {
         setIsLoading(true);
-        const res = await axios.get("BACKEND_URL/user/userInfo", { withCredentials: true });
+        const res = await axios.get(`${BACKEND_URL}/user/userInfo`, { withCredentials: true });
         setUserInfo(res.data.userInfo);
       } catch (err) {
         setError("Failed to fetch data");
@@ -31,7 +31,7 @@ const Navs = () => {
 
   const Logout = async () => {
     try {
-      await axios.post("BACKEND_URL/user/logout", {}, { withCredentials: true });
+      await axios.post(`{BACKEND_URL}/user/logout`, {}, { withCredentials: true });
       setUserInfo(null);
       navigate("/sign-up");
       alert('Logged out successfully')
@@ -105,7 +105,7 @@ const Navs = () => {
               onClick={() => setIsMenuShown(!isMenuShow)}
             >
               <img
-                src={`BACKEND_URL/${userInfo.image}`}
+                src={`${BACKEND_URL}/${userInfo.image}`}
                 alt={userInfo.user_name}
                 className="w-10 h-10 rounded-full"
               />
@@ -115,7 +115,7 @@ const Navs = () => {
               <div className="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-lg px-6 py-4 z-50">
                 <h1 className="text-xl font-bold mb-3 ms-13 text-green-500 underline">User info</h1>
                 <div>
-                  <img src={`BACKEND_URL/${userInfo.image}`} alt={userInfo.user_name} 
+                  <img src={`${BACKEND_URL}/${userInfo.image}`} alt={userInfo.user_name} 
                      className="object-cover rounded-full w-30 h-30 ms-10 mb-4 shadow-2xl transition duration-200 hover:translate-y-2 border-2 text-green-500"
                    />
                 </div>
