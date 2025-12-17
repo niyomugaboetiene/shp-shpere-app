@@ -17,7 +17,7 @@ const Electronics = () => {
     useEffect(() => {
         try {
             const GetNewProducts = async () => {
-                const product = await axios.get('BACKEND_URL/product/electronics', { withCredentials: true });
+                const product = await axios.get(`${BACKEND_URL}/product/electronics`, { withCredentials: true });
                 setProducts(product.data.ElectronicsProduct);
             };
             GetNewProducts();
@@ -28,7 +28,7 @@ const Electronics = () => {
 
 const fetchUserCart = async () => {
   try {
-    const res = await axios.get("BACKEND_URL/product/cart", {
+    const res = await axios.get(`${BACKEND_URL}/product/cart`, {
       withCredentials: true,
     });
     setUserCart(res.data.cart || []);
@@ -43,7 +43,7 @@ useEffect(() => {
 const AddToCart = async(product_id) => {
   try {
     setIsLoading(true);
-    await axios.post(`BACKEND_URL/product/cart/add/${product_id}`, { quality: 1 }, { withCredentials: true });
+    await axios.post(`${BACKEND_URL}/product/cart/add/${product_id}`, { quality: 1 }, { withCredentials: true });
     setCartMessage(true);
     await fetchUserCart(); 
     setTimeout(() => {
@@ -95,7 +95,7 @@ const isProductInCart = (product_id) => {
                     >
                         <div className="relative w-full h-74 overflow-hidden rounded-lg mb-3">
                             <img
-                                src={`BACKEND_URL/${item.image}`}
+                                src={`${BACKEND_URL}/${item.image}`}
                                 className="w-full h-full object-cover hover:scale-105 transition duration-200"
                             />
    

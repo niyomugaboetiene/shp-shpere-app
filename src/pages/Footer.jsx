@@ -1,6 +1,5 @@
 import { FaFacebook, FaInstagram, FaTwitter, FaTwitch, FaWhatsapp, FaLinkedinIn } from "react-icons/fa";
 import { Link } from "react-router-dom";
-const BACKEND_URL = import.meta.env.BACKEND_URL;
 
 const Footer = () => {
     return (

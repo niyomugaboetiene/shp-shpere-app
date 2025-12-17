@@ -45,7 +45,7 @@ const Home = () => {
 
   const fetchCurrentUser = async () => {
     try {
-      const res = await axios.get("BACKEND_URL/user/userInfo", {
+      const res = await axios.get(`${BACKEND_URL}/user/userInfo`, {
         withCredentials: true,
       });
       setCurrentUser(res.data.userInfo);

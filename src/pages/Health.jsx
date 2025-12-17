@@ -16,7 +16,7 @@ const Health = () => {
     useEffect(() => {
             try {
                  const GetNewProducts = async() => {
-                      const product = await axios.get('BACKEND_URL/product/health', {withCredentials: true});
+                      const product = await axios.get(`${BACKEND_URL}/product/health`, {withCredentials: true});
                       setProducts(product.data.ToysProduct);
                 };
             
@@ -28,7 +28,7 @@ const Health = () => {
 
 const AddToCart = async(product_id) => {
     try {
-        await axios.post(`BACKEND_URL/product/cart/add/${product_id}`, { quality: 1 }, { withCredentials: true });
+        await axios.post(`${BACKEND_URL}/product/cart/add/${product_id}`, { quality: 1 }, { withCredentials: true });
         setCartMessage(true);
         await fetchUserCart();
         setTimeout(() => {
@@ -44,7 +44,7 @@ const AddToCart = async(product_id) => {
 
 const fetchUserCart = async () => {
   try {
-    const res = await axios.get("BACKEND_URL/product/cart", {
+    const res = await axios.get(`${BACKEND_URL}/product/cart`, {
       withCredentials: true,
     });
     setUserCart(res.data.cart || []);
@@ -89,7 +89,7 @@ useEffect(() => {
                         <div className="w-full h-74 overflow-hidden rounded-lg mb-3"
                             
                         >
-                              <img src={`BACKEND_URL/${item.image}`} className="w-full h-full object-cover hover:scale-105 transition duration-200"
+                              <img src={`${BACKEND_URL}/${item.image}`} className="w-full h-full object-cover hover:scale-105 transition duration-200"
                               />
                             </div>
          
