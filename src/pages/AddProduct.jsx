@@ -29,7 +29,7 @@ const AddProduct = () => {
         formData.append("image", image);
         try {
             setIsLoading(true);
-            await axios.post('https://shp-shpere-app-1.onrender.com/product/add', formData, {
+            await axios.post('http://localhost:5000/product/add', formData, {
                 withCredentials: true,
                 headers: { "Content-Type": "multipart/form-data" },
             });

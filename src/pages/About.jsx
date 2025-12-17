@@ -21,7 +21,7 @@ const AboutUs = () => {
 
   const fetchStoreStats = async () => {
     try {
-      const productsRes = await axios.get("https://shp-shpere-app-1.onrender.com/product/getProduct", {
+      const productsRes = await axios.get("http://localhost:5000/product/getProduct", {
         withCredentials: true,
       });
       
