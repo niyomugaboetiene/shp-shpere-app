@@ -12,8 +12,15 @@ import session  from "express-session";
 const app = express();
 app.use('/Product_Image', express.static("Product_Image"));
 app.use('/User_Image', express.static("User_Image"));
-app.use(express.json());
 import MongoStore from "connect-mongo";
+
+app.use(cors({
+    credentials: true,
+    origin: 'http://localhost:5173'
+}));
+
+app.use(express.json());
+
 app.use(session({
     secret: process.env.SECRET_KEY,
     saveUninitialized: true,
@@ -28,11 +35,6 @@ app.use(session({
         sameSite: 'lax',
         maxAge: 1000 * 60 * 60 * 24, 
     }
-}));
-
-app.use(cors({
-    credentials: true,
-    origin: 'http://localhost:5173'
 }));
 
 app.use('/product', ProductRoute);

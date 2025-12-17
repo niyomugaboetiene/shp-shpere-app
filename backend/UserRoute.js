@@ -42,6 +42,7 @@ routes.post('/register', uploads.single('image'), async(req, res) => {
          res.status(500).json({message: 'Database error'});
     }      
 })
+
 routes.post('/login', async (req, res) => {
     const { user_name, password } = req.body;
 
