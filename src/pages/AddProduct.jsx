@@ -30,7 +30,7 @@ const AddProduct = () => {
         formData.append("image", image);
         try {
             setIsLoading(true);
-            await axios.post('BACKEND_URL/product/add', formData, {
+            await axios.post(`${BACKEND_URL}/product/add`, formData, {
                 withCredentials: true,
                 headers: { "Content-Type": "multipart/form-data" },
             });

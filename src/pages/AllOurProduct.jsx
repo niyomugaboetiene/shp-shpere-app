@@ -18,7 +18,7 @@ const OurProduct = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get("BACKEND_URL/product/getProduct", {
+        const res = await axios.get(`${BACKEND_URL}/product/getProduct`, {
           withCredentials: true,
         });
         setProducts(res.data.products);
@@ -41,7 +41,7 @@ const OurProduct = () => {
 
   const fetchUserCart = async () => {
     try {
-      const res = await axios.get("BACKEND_URL/product/cart", {
+      const res = await axios.get(`${BACKEND_URL}/product/cart`, {
         withCredentials: true,
       });
       setUserCart(res.data.cart || []);
@@ -54,7 +54,7 @@ const OurProduct = () => {
     try {
       setIsLoading(true);
       await axios.post(
-        `BACKEND_URL/product/cart/add/${product_id}`,
+        `${BACKEND_URL}/product/cart/add/${product_id}`,
         { quality: 1 },
         { withCredentials: true }
       );
@@ -76,7 +76,7 @@ const OurProduct = () => {
 
   const fetchCurrentUser = async () => {
     try {
-      const res = await axios.get("BACKEND_URL/user/userInfo", {
+      const res = await axios.get(`${BACKEND_URL}/user/userInfo`, {
         withCredentials: true,
       });
       setCurrentUser(res.data.userInfo);
@@ -91,7 +91,7 @@ const OurProduct = () => {
       const confirmDelete = window.confirm("You want to delete this product ?");
       if (!confirmDelete) return;
       setIsLoading(true);
-      await axios.delete(`BACKEND_URL/product/delete/${product_id}`, {
+      await axios.delete(`${BACKEND_URL}/product/delete/${product_id}`, {
         withCredentials: true,
       });
       setIsLoading(false);
@@ -135,7 +135,7 @@ const OurProduct = () => {
           >
             <div className="relative w-full h-72 overflow-hidden rounded-lg mb-4">
               <img
-                src={`BACKEND_URL/${item.image}`}
+                src={`${BACKEND_URL}/${item.image}`}
                 className="w-full h-full object-cover hover:scale-110 transition duration-300"
               />
 

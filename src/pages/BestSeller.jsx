@@ -16,7 +16,7 @@ const BestSeller = () => {
     useEffect(() => {
         try {
             const GetBestSold = async () => {
-                const product = await axios.get('BACKEND_URL/product/best-sold', { withCredentials: true });
+                const product = await axios.get(`${BACKEND_URL}/product/best-sold`, { withCredentials: true });
                 setProducts(product.data.products);
             };
             GetBestSold();
@@ -27,7 +27,7 @@ const BestSeller = () => {
 
     const AddToCart = async(product_id) => {
         try {
-            await axios.post(`BACKEND_URL/product/cart/add/${product_id}`, { quality: 1 }, { withCredentials: true });
+            await axios.post(`${BACKEND_URL}/product/cart/add/${product_id}`, { quality: 1 }, { withCredentials: true });
             setCartMessage(true);
             setTimeout(() => {
                 setCartMessage("");
@@ -43,7 +43,7 @@ const BestSeller = () => {
 
 const fetchUserCart = async () => {
   try {
-    const res = await axios.get("BACKEND_URL/product/cart", {
+    const res = await axios.get(`${BACKEND_URL}/product/cart`, {
       withCredentials: true,
     });
     setUserCart(res.data.cart || []);
@@ -84,7 +84,7 @@ useEffect(() => {
                     >
                         <div className="relative w-full h-72 overflow-hidden rounded-lg mb-4">
                             <img
-                                src={`BACKEND_URL/${item.image}`}
+                                src={`${BACKEND_URL}/${item.image}`}
                                 className="w-full h-full object-cover hover:scale-110 transition duration-300"
                             />
 
