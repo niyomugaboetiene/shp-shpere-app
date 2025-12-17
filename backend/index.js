@@ -40,7 +40,10 @@ app.use(session({
 app.use('/product', ProductRoute);
 app.use('/user', UserRoute);
 
-mongoose.connect(process.env.MONGO_URL)
+mongoose.connect(process.env.MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
 .then(() => {
     console.log('Connected successfully');
 }).catch((error) => {
