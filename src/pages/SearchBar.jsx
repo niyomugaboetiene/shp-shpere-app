@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { FaShoppingCart, FaPlus } from "react-icons/fa";
+const BACKEND_URL = import.meta.env.BACKEND_URL;
 
 const SearchResults = () => {
   const { state } = useLocation();
@@ -15,7 +16,7 @@ const SearchResults = () => {
 
   const fetchUserCart = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/product/cart", {
+      const res = await axios.get("BACKEND_URL/product/cart", {
         withCredentials: true,
       });
       setUserCart(res.data.cart || []);
@@ -31,7 +32,7 @@ const SearchResults = () => {
   const AddToCart = async (product_id) => {
     try {
       await axios.post(
-        `http://localhost:5000/product/cart/add/${product_id}`,
+        `BACKEND_URL/product/cart/add/${product_id}`,
         { quality: 1 },
         { withCredentials: true }
       );
@@ -72,7 +73,7 @@ const SearchResults = () => {
             >
               <div className="w-full h-72 overflow-hidden rounded-lg mb-3">
                 <img
-                  src={`http://localhost:5000/${item.image}`}
+                  src={`BACKEND_URL/${item.image}`}
                   alt={item.product_name}
                   className="w-full h-full object-cover hover:scale-105 transition duration-200"
                 />

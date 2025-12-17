@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { FaEdit } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+const BACKEND_URL = import.meta.env.BACKEND_URL;
 
 const LastPage = () => {
   const [currentUser, setCurrentUser] = useState([]);
@@ -14,7 +15,7 @@ const LastPage = () => {
   useEffect(() => {
     const fetchCurrentUser = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/user/userInfo", {
+        const res = await axios.get("BACKEND_URL/user/userInfo", {
           withCredentials: true,
         });
         setCurrentUser(res.data.userInfo);
@@ -31,7 +32,7 @@ useEffect(() => {
   const fetchProducts = async () => {
     const product_id = 20;
     try {
-      const res = await axios.get(`http://localhost:5000/product/getProduct/${product_id}`, {
+      const res = await axios.get(`BACKEND_URL/product/getProduct/${product_id}`, {
         withCredentials: true,
       });
       setCurrentProduct(res.data.product);
@@ -44,7 +45,7 @@ useEffect(() => {
 
 const AddToCart = async(product_id) => {
     try {
-        await axios.post(`http://localhost:5000/product/cart/add/${product_id}`, { quality: 1 }, { withCredentials: true });
+        await axios.post(`BACKEND_URL/product/cart/add/${product_id}`, { quality: 1 }, { withCredentials: true });
         setCartMessage(true);
         setTimeout(() => {
           setCartMessage("");
@@ -70,7 +71,7 @@ const AddToCart = async(product_id) => {
             )}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8 relative">
           <img
-            src={`http://localhost:5000/${currentProduct.image}`}
+            src={`BACKEND_URL/${currentProduct.image}`}
             alt="Speaker product"
             className="w-full max-w-[400px] mx-auto object-cover rounded-lg transition-transform duration-300 hover:scale-105"
           />

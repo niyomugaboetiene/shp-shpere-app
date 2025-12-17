@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+const BACKEND_URL = import.meta.env.BACKEND_URL;
 
 const LoginAccount = () => {
     const [user_name, setUser_name] = useState("");
@@ -19,7 +20,7 @@ const LoginAccount = () => {
 
         try {
             setIsLoading(true);
-            await axios.post('http://localhost:5000/user/login',{ user_name, password }, {
+            await axios.post('BACKEND_URL/user/login',{ user_name, password }, {
                 withCredentials: true,
             });
             

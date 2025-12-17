@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+const BACKEND_URL = import.meta.env.BACKEND_URL;
 
 const RegisterAccount = () => {
     const [user_name, setUser_name] = useState("");
@@ -23,7 +24,7 @@ const RegisterAccount = () => {
         formData.append("image", image);
         try {
             setIsLoading(true);
-            await axios.post('http://localhost:5000/user/register', formData, {
+            await axios.post('BACKEND_URL/user/register', formData, {
                 withCredentials: true,
                headers: { "Content-Type": "multipart/form-data" },
             });

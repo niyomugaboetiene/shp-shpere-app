@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { FaMapMarkerAlt, FaWhatsapp, FaEnvelope, FaPhoneAlt, FaLinkedin, FaGithub } from "react-icons/fa";
+const BACKEND_URL = import.meta.env.BACKEND_URL;
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -21,7 +22,7 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      await axios.post("http://localhost:5000/send", formData);
+      await axios.post("BACKEND_URL/send", formData);
       setSubmitStatus("success");
       setFormData({ name: "", email: "", message: "" });
     } catch (err) {

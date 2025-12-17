@@ -2,6 +2,7 @@ import { FaShoppingCart, FaPlus } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+const BACKEND_URL = import.meta.env.BACKEND_URL;
 
 const BestSeller = () => {
     const [showAll, setShowAll] = useState(false);
@@ -15,7 +16,7 @@ const BestSeller = () => {
     useEffect(() => {
         try {
             const GetBestSold = async () => {
-                const product = await axios.get('http://localhost:5000/product/best-sold', { withCredentials: true });
+                const product = await axios.get('BACKEND_URL/product/best-sold', { withCredentials: true });
                 setProducts(product.data.products);
             };
             GetBestSold();
@@ -26,7 +27,7 @@ const BestSeller = () => {
 
     const AddToCart = async(product_id) => {
         try {
-            await axios.post(`http://localhost:5000/product/cart/add/${product_id}`, { quality: 1 }, { withCredentials: true });
+            await axios.post(`BACKEND_URL/product/cart/add/${product_id}`, { quality: 1 }, { withCredentials: true });
             setCartMessage(true);
             setTimeout(() => {
                 setCartMessage("");
@@ -42,7 +43,7 @@ const BestSeller = () => {
 
 const fetchUserCart = async () => {
   try {
-    const res = await axios.get("http://localhost:5000/product/cart", {
+    const res = await axios.get("BACKEND_URL/product/cart", {
       withCredentials: true,
     });
     setUserCart(res.data.cart || []);
@@ -83,7 +84,7 @@ useEffect(() => {
                     >
                         <div className="relative w-full h-72 overflow-hidden rounded-lg mb-4">
                             <img
-                                src={`http://localhost:5000/${item.image}`}
+                                src={`BACKEND_URL/${item.image}`}
                                 className="w-full h-full object-cover hover:scale-110 transition duration-300"
                             />
 

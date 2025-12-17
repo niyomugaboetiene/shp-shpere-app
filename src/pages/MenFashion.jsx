@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { FaShoppingCart, FaPlus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+const BACKEND_URL = import.meta.env.BACKEND_URL;
 
 const MenFashion = () => {
     const [showAll, setShowAll] = useState(false);
@@ -16,7 +17,7 @@ const MenFashion = () => {
     useEffect(() => {
         const GetNewProducts = async () => {
             try {
-                const product = await axios.get('http://localhost:5000/product/men', { withCredentials: true });
+                const product = await axios.get('BACKEND_URL/product/men', { withCredentials: true });
                 setProducts(product.data.MenProduct);
             } catch (error) {
                 console.log("ERROR: ", error.message);
@@ -28,7 +29,7 @@ const MenFashion = () => {
     const AddToCart = async(product_id) => {
         try {
             setIsLoading(true);
-            await axios.post(`http://localhost:5000/product/cart/add/${product_id}`, { quality: 1 }, { withCredentials: true });
+            await axios.post(`BACKEND_URL/product/cart/add/${product_id}`, { quality: 1 }, { withCredentials: true });
             setCartMessage(true);
             await fetchUserCart();
             
@@ -46,7 +47,7 @@ const MenFashion = () => {
 
     const fetchUserCart = async () => {
         try {
-            const res = await axios.get("http://localhost:5000/product/cart", {
+            const res = await axios.get("BACKEND_URL/product/cart", {
                 withCredentials: true,
             });
             setUserCart(res.data.cart || []);
@@ -101,7 +102,7 @@ const MenFashion = () => {
                     >
                         <div className="relative w-full h-72 overflow-hidden rounded-lg mb-3">
                             <img
-                                src={`http://localhost:5000/${item.image}`}
+                                src={`BACKEND_URL/${item.image}`}
                                 className="w-full h-full object-cover hover:scale-105 transition duration-200"
                             />
                         </div>

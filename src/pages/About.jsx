@@ -3,8 +3,8 @@ import { FaRocket, FaHeart, FaGem, FaCompass, FaShoppingBag, FaUsers, FaAward, F
 import { useNavigate } from "react-router-dom";
 import github from "../assets/github.jpeg"
 import axios from "axios";
-
 const BACKEND_URL = import.meta.env.BACKEND_URL;
+
 const AboutUs = () => {
   const [stats, setStats] = useState({
     totalProducts: 0,
@@ -22,7 +22,7 @@ const AboutUs = () => {
 
   const fetchStoreStats = async () => {
     try {
-      const productsRes = await axios.get(`http://localhost:5000/product/getProduct`, {
+      const productsRes = await axios.get(`${BACKEND_URL}/product/getProduct`, {
         withCredentials: true,
       });
       

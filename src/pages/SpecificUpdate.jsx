@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+const BACKEND_URL = import.meta.env.BACKEND_URL;
 
 const SpecificUpdation = () => {
     const [image, setImage] = useState(null);
@@ -15,7 +16,7 @@ const SpecificUpdation = () => {
            const formData = new FormData();
            if (image) formData.append('image', image);
 
-           await axios.put(`http://localhost:5000/product/update/${product_id}`, formData, {
+           await axios.put(`BACKEND_URL/product/update/${product_id}`, formData, {
             withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } });
             
            setIsLoading(false);

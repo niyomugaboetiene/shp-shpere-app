@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { FaTrash, FaPlus, FaMinus, FaShoppingBag } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+const BACKEND_URL = import.meta.env.BACKEND_URL;
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -13,7 +14,7 @@ const CartPage = () => {
     const fetchCart = async () => {
       try {
         setIsLoading(true);
-        const res = await axios.get("http://localhost:5000/product/cart", {
+        const res = await axios.get("BACKEND_URL/product/cart", {
           withCredentials: true,
         });
         setCartItems(res.data.cart);
@@ -31,7 +32,7 @@ const CartPage = () => {
   const removeFromCart = async (product_id) => {
     try {
       await axios.post(
-        "http://localhost:5000/product/cart/remove",
+        "BACKEND_URL/product/cart/remove",
         { product_id },
         { withCredentials: true }
       );
@@ -47,7 +48,7 @@ const CartPage = () => {
     
     try {
       await axios.put(
-        `http://localhost:5000/product/updates/${product_id}`,
+        `BACKEND_URL/product/updates/${product_id}`,
         { quality: newQuantity },
         { withCredentials: true }
       );
@@ -113,7 +114,7 @@ const CartPage = () => {
               <div key={item.product_id} className="grid grid-cols-12 gap-4 items-center px-6 py-6 hover:bg-gray-50 transition-colors duration-200">
                 <div className="col-span-5 flex items-center space-x-4">
                   <img
-                    src={`http://localhost:5000/${item.image}`}
+                    src={`BACKEND_URL/${item.image}`}
                     alt={item.product_name}
                     className="w-20 h-20 object-cover rounded-xl shadow-md"
                   />
