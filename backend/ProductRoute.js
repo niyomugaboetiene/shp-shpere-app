@@ -61,6 +61,7 @@ route.post('/add', AdminCheck, uploads.single('image'), async(req, res) => {
         });
     }
 });
+
 route.get('/getProduct', async(req, res) => {
     try {
       const products = await ProductSchema.find();
