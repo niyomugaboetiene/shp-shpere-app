@@ -2,6 +2,8 @@ import ProductSchema from "./productSchema.js";
 import express from "express"
 import multer from "multer";
 import userSchema from "./userSchema.js";
+import { v2 as cloudinary } from "cloudinary";
+
 const route = express.Router();
 
 
@@ -16,35 +18,44 @@ const AdminCheck = (req, res, next) => {
 
     next();
 };
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'Product_Image/');
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + '-' + file.originalname); // * to avoid duplicates
-    }
-})  
-
+const storage = multer.memoryStorage(); 
 const uploads = multer({ storage });
 
 route.post('/add', AdminCheck, uploads.single('image'), async(req, res) => {
-    const { product_name, category, price, stock } = req.body;
-    const imagPath = req.file ? req.file.path : null;
     try {
-        await ProductSchema.create({
-            product_name, category, price, stock, image: imagPath
+        const { product_name, category, price, stock } = req.body;
+        
+        if (!req.file) {
+            return res.status(400).json({ message: 'Product image is required' });
+        }
+        
+        const b64 = Buffer.from(req.file.buffer).toString('base64');
+        const dataURI = `data:${req.file.mimetype};base64,${b64}`;
+        
+        const cloudinaryResult = await cloudinary.uploader.upload(dataURI, {
+            folder: 'ecommerce-app/products'
         });
+        
+        await ProductSchema.create({
+            product_name, 
+            category, 
+            price: parseFloat(price), 
+            stock: parseInt(stock), 
+            image: cloudinaryResult.secure_url 
+        });
+        
         res.status(201).json({
-            message: 'Product Added successfully'
+            message: 'Product Added successfully',
+            imageUrl: cloudinaryResult.secure_url
         });
     } catch (err) {
+        console.error('Error adding product:', err);
         res.status(500).json({
             message: 'Server Error',
             error: err.message
         });
     }
 });
-
 route.get('/getProduct', async(req, res) => {
     try {
       const products = await ProductSchema.find();
