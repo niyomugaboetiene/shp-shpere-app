@@ -3,7 +3,7 @@ import { FaRocket, FaHeart, FaGem, FaCompass, FaShoppingBag, FaUsers, FaAward, F
 import { useNavigate } from "react-router-dom";
 import github from "../assets/github.jpeg"
 import axios from "axios";
-const BACKEND_URL = import.meta.env.BACKEND_URL;
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const AboutUs = () => {
   const [stats, setStats] = useState({
