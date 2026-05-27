@@ -12,7 +12,7 @@ import clothes2 from "../assets/electrics/women1.webp"
 import clothes3 from "../assets/clothes/clothes3.webp"
 import { Link } from "react-router-dom";
 import axios from "axios";
-const BACKEND_URL = import.meta.env.BACKEND_URL;
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Images = [
   { image: phone1, description: "Modern phones for better price" },

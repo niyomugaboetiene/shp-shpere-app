@@ -3,7 +3,7 @@ import { FaSearch, FaShoppingCart, FaBars, FaTimes } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { searchProducts } from "./SearchApi"; 
-const BACKEND_URL = import.meta.env.BACKEND_URL;
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Navs = () => {
   const [userInfo, setUserInfo] = useState(null);

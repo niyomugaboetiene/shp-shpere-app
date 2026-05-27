@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { FaShoppingCart, FaPlus } from "react-icons/fa";
-const BACKEND_URL = import.meta.env.BACKEND_URL;
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const SearchResults = () => {
   const { state } = useLocation();

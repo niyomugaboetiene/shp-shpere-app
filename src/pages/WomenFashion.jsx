@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { FaShoppingCart, FaHeart, FaPlus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-const BACKEND_URL = import.meta.env.BACKEND_URL;
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const WomenFashion = () => {
     const [showAll, setShowAll] = useState(false);

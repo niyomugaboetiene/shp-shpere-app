@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-const BACKEND_URL = import.meta.env.BACKEND_URL;
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const SpecificUpdation = () => {
     const [image, setImage] = useState(null);

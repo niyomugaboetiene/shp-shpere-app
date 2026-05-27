@@ -2,7 +2,7 @@ import { FaShoppingCart, FaPlus } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-const BACKEND_URL = import.meta.env.BACKEND_URL;
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const BestSeller = () => {
     const [showAll, setShowAll] = useState(false);

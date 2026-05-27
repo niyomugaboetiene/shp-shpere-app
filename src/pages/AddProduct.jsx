@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-const BACKEND_URL = import.meta.env.BACKEND_URL;
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const AddProduct = () => {
     const [product_name, setProduct_name] = useState("");
@@ -30,7 +30,7 @@ const AddProduct = () => {
         formData.append("image", image);
         try {
             setIsLoading(true);
-            await axios.post(`${BACKEND_URL}/product/add`, formData, {
+            await axios.post(`${VITE_BACKEND_URL}/product/add`, formData, {
                 withCredentials: true,
                 headers: { "Content-Type": "multipart/form-data" },
             });
