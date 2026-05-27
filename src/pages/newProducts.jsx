@@ -57,8 +57,8 @@ useEffect(() => {
            return userCart.some(item => item.product_id === product_id);
     };
 
-    const itemToShow = showAll ? products : products.slice(0, 8);
-    const hasMoreItems = products.length > 8;
+    const itemToShow = showAll ? products : products?.slice(0, 8);
+    const hasMoreItems = products?.length > 8;
 
     return (
         <div className="flex flex-col items-center justify-center p-6">
@@ -70,7 +70,7 @@ useEffect(() => {
                    <p className="text-red-500">{error}</p>
             )}
              <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full max-w-7xl transition-all duration-500`}>
-                {itemToShow.map((item, idx) => (
+                {itemToShow?.map((item, idx) => (
   <div
     key={idx}
     className="p-4 rounded-2xl hover:shadow-xl transition duration-200"
@@ -128,7 +128,7 @@ useEffect(() => {
                 </button>
              )}
 
-             {(products.length === 0) && (
+             {(products?.length === 0) && (
                   <p className="text-center mt-10 text-gray-500">No new products found.</p>
              )
          }

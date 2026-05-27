@@ -60,8 +60,8 @@ useEffect(() => {
            return userCart.some(item => item.product_id === product_id);
     };
 
-    const imageToShow = showAll ? products : products.slice(0, 8);
-    const hasMoreItems = products.length > 8;
+    const imageToShow = showAll ? products : products?.slice(0, 8);
+    const hasMoreItems = products?.length > 8;
 
     return (
         <div className="flex flex-col items-center justify-center p-9 mt-4">
@@ -75,7 +75,7 @@ useEffect(() => {
             )}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full max-w-7xl transition-all duration-500">
-                {imageToShow.map((item, idx) => (
+                {imageToShow?.map((item, idx) => (
                     <div
                         key={idx}
                         className="rounded-2xl hover:shadow-2xl transition-all duration-300 p-4"
@@ -135,7 +135,7 @@ useEffect(() => {
                 </button>
             )}
 
-            {products.length === 0 && (
+            {products?.length === 0 && (
                 <p className="text-center mt-10 text-gray-500">No best sold products found.</p>
             )}
         </div>

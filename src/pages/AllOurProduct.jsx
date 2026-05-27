@@ -114,7 +114,7 @@ const OurProduct = () => {
     return userCart.some(item => item.product_id === productId);
   };
 
-  const productsToShow = showAll ? products : products.slice(0, 8);
+  const productsToShow = showAll ? products : products?.slice(0, 8);
 
   return (
     <div className="flex flex-col items-center justify-center p-9 mt-4">
@@ -126,7 +126,7 @@ const OurProduct = () => {
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full max-w-7xl transition-all duration-500">
-        {productsToShow.map((item, idx) => (
+        {productsToShow?.map((item, idx) => (
           <div
             key={idx}
             className="rounded-2xl hover:shadow-2xl transition-all duration-300 p-4"
@@ -188,7 +188,7 @@ const OurProduct = () => {
         ))}
       </div>
 
-      {products.length > 8 && !showAll && (
+      {products?.length > 8 && !showAll && (
         <button
           onClick={() => setShowAll(true)}
           className="mt-6 bg-blue-500 hover:bg-blue-600 px-6 py-3 rounded-lg hover:shadow-lg transition duration-200 text-white"
@@ -206,7 +206,7 @@ const OurProduct = () => {
         </button>
       )}
 
-      {products.length === 0 && (
+      {products?.length === 0 && (
         <p className="text-center mt-10 text-gray-500">No products found.</p>
       )}
 

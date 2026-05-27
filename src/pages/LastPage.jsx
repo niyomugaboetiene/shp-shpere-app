@@ -71,7 +71,7 @@ const AddToCart = async(product_id) => {
             )}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8 relative">
           <img
-            src={`${BACKEND_URL}/${currentProduct.image}`}
+            src={`${BACKEND_URL}/${currentProduct?.image}`}
             alt="Speaker product"
             className="w-full max-w-[400px] mx-auto object-cover rounded-lg transition-transform duration-300 hover:scale-105"
           />
