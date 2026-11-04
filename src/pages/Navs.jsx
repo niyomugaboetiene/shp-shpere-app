@@ -31,7 +31,7 @@ const Navs = () => {
 
   const Logout = async () => {
     try {
-      await axios.post(`{BACKEND_URL}/user/logout`, {}, { withCredentials: true });
+      await axios.post(`${BACKEND_URL}/user/logout`, {}, { withCredentials: true });
       setUserInfo(null);
       navigate("/sign-up");
       alert('Logged out successfully')
