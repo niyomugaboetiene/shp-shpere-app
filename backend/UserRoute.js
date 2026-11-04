@@ -1,163 +1,615 @@
-import express, { json } from "express";
+
+import ProductSchema from "./productSchema.js";
+import express from "express";
 import multer from "multer";
-import UserSchema from "./userSchema.js";
-import bcrypt from "bcrypt";
-import route from "./ProductRoute.js";
-import { v2 as cloudinary } from "cloudinary";
+import userSchema from "./userSchema.js";
+import path from "path";
 
-const routes = express.Router();
+const route = express.Router();
 
-// Configure Cloudinary
-cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET
-});
-
-// Configure multer for memory storage (no local disk storage)
-const storage = multer.memoryStorage();
-const uploads = multer({ 
-    storage,
-    limits: {
-        fileSize: 5 * 1024 * 1024 // 5MB limit
+const AdminCheck = (req, res, next) => {
+    if (!req.session.user) {
+        return res.status(401).json({ message: 'Unauthorized' });
     }
-});
 
-// Helper function to upload to Cloudinary
-const uploadToCloudinary = (fileBuffer, fileName) => {
-    return new Promise((resolve, reject) => {
-        // Convert buffer to base64
-        const b64 = Buffer.from(fileBuffer).toString('base64');
-        const dataURI = `data:image/jpeg;base64,${b64}`; // Adjust mime type as needed
-        
-        cloudinary.uploader.upload(dataURI, {
-            folder: 'ecommerce-app/users',
-            public_id: fileName.split('.')[0], // Remove extension
-            overwrite: false
-        }, (error, result) => {
-            if (error) reject(error);
-            else resolve(result);
-        });
-    });
+    if (!req.session.user.isAdmin) {
+        return res.status(403).json({ message: "Forbidden. Admins only." });
+    }
+
+    next();
 };
 
-routes.post('/register', uploads.single('image'), async (req, res) => {
-    try {
-        const { user_name, password } = req.body;
-        
-        // Validation
-        if (!user_name || !password) {
-            return res.status(400).json({ message: 'Username and password are required' });
-        }
-        
-        if (!req.file) {
-            return res.status(400).json({ message: 'Profile image is required' });
-        }
-        
-        // Check if user exists
-        const isExist = await UserSchema.findOne({ user_name });
-        if (isExist) {
-            return res.status(409).json({ message: 'Username already taken' });
-        }
-        
-        // Hash password
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
-        
-        // Upload image to Cloudinary
-        let cloudinaryResult;
-        try {
-            cloudinaryResult = await uploadToCloudinary(
-                req.file.buffer,
-                `${Date.now()}-${req.file.originalname}`
-            );
-        } catch (uploadError) {
-            console.error('Cloudinary upload error:', uploadError);
-            return res.status(500).json({ message: 'Failed to upload image' });
-        }
-        
-        // Create user with Cloudinary URL
-        await UserSchema.create({
-            user_name,
-            password: hashedPassword,
-            image: cloudinaryResult.secure_url, // Cloudinary URL
-            cloudinary_public_id: cloudinaryResult.public_id // Store public_id for future deletion
-        });
-        
-        return res.status(201).json({ 
-            message: 'User registered successfully',
-            imageUrl: cloudinaryResult.secure_url
-        });
-        
-    } catch (error) {
-        console.error('Registration error:', error);
-        return res.status(500).json({ message: 'Database error' });
-    }      
-});
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "Product_Image/");
+    },
 
-routes.post('/login', async (req, res) => {
-    const { user_name, password } = req.body;
-
-    if (!user_name || !password) {
-        return res.status(400).json({ message: "Missing username or password" });
-    }
-
-    try {
-        const user = await UserSchema.findOne({ user_name });
-        if (!user) {
-            return res.status(401).json({ message: "Invalid username or password" });
-        }
-
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) {
-            return res.status(401).json({ message: "Invalid username or password" });
-        }
-
-        req.session.user = {
-            user_id: user.user_id,
-            user_name: user.user_name,
-            isAdmin: user.isAdmin,
-            image: user.image
-        };
-
-        res.status(200).json({ message: "Login successfully", user: req.session.user });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname));
     }
 });
 
-
-routes.get('/userInfo', (req, res) => {
-    if (req.session.user) {
-        return res.status(200).json({ userInfo: req.session.user })
-    }
-    return res.status(401).json("Not logged in")
-});
-
-
-routes.post('/logout', async(req, res) => {
-    req.session.destroy((err) => {
-        if (err) throw err
-        console.log('Logged out')
-    })
-});
-
-routes.post('/cart/add', async(req, res) => {
-    if (!req.session.user) return res.status(401).json({ message: 'Login first' });
-
-    const { product_id, quality } = req.body;
-    const user = await UserSchema.findOne({ user_id: req.session.user.user_id });
-
-    const existing = user.cart.find(p => p.product_id === product_id);
-
-    if (existing) {
-        existing.quality += quality;
+const fileFilter = (req, file, cb) => {
+    if (file.mimetype.startsWith("image/")) {
+        cb(null, true);
     } else {
-        user.cart.push({ product_id, quality });
+        cb(new Error("Only image files are allowed!"), false);
     }
+};
 
-    await user.save();
-    res.status(200).json({ message: "Added to cart", cart: user.cart });
+const uploads = multer({
+    storage: storage,
+    fileFilter: fileFilter,
+    limits: {
+        fileSize: 5 * 1024 * 1024
+    }
 });
 
-export default routes;
+route.post('/add', AdminCheck, uploads.single('image'), async(req, res) => {
+    try {
+        const { product_name, category, price, stock } = req.body;
+
+        if (!req.file) {
+            return res.status(400).json({ message: 'Product image is required' });
+        }
+
+        const imageUrl = `/Product_Image/${req.file.filename}`;
+
+        await ProductSchema.create({
+            product_name,
+            category,
+            price: parseFloat(price),
+            stock: parseInt(stock),
+            image: imageUrl
+        });
+
+        res.status(201).json({
+            message: 'Product Added successfully',
+            imageUrl: imageUrl
+        });
+
+    } catch (err) {
+        console.error('Error adding product:', err);
+
+        res.status(500).json({
+            message: 'Server Error',
+            error: err.message
+        });
+    }
+});
+
+route.get('/getProduct', async(req, res) => {
+    try {
+        const products = await ProductSchema.find();
+
+        if (products.length > 0) {
+            res.status(200).json({
+                message: 'Product in the Database',
+                products
+            });
+        } else {
+            res.status(404).json({
+                message: 'error in fetching product'
+            });
+        }
+
+    } catch (error) {
+        res.status(500).json({ message: 'Database error' });
+    }
+});
+
+route.get('/getProduct/:product_id', async (req, res) => {
+    const { product_id } = req.params;
+
+    try {
+        const product = await ProductSchema.findOne({
+            product_id: Number(product_id)
+        });
+
+        if (product) {
+            res.status(200).json({
+                message: 'Product found',
+                product
+            });
+        } else {
+            res.status(404).json({
+                message: 'Product not found'
+            });
+        }
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            message: 'Database error',
+            error: error.message
+        });
+    }
+});
+
+route.get('/best-sold', async(req, res) => {
+    try {
+        const products = await ProductSchema.find({
+            timesAddedToCart: { $gte: 5 }
+        })
+        .sort({ timesAddedToCart: -1 })
+        .limit(8);
+
+        if (products.length === 0) {
+            return res.status(404).json({
+                message: 'No best sold products found.'
+            });
+        }
+
+        res.status(200).json({
+            message: 'new Products in the Database',
+            products
+        });
+
+    } catch (error) {
+        res.status(500).json({ message: 'Database error' });
+    }
+});
+
+route.get('/newProducts', async(req, res) => {
+    try {
+        const products = await ProductSchema.find()
+            .sort({ date: -1 })
+            .limit(12);
+
+        res.status(200).json({
+            message: 'best sold Products in the Database',
+            products
+        });
+
+    } catch (error) {
+        res.status(500).json({ message: 'Database error' });
+    }
+});
+
+route.get('/women', async(req, res) => {
+    try {
+        const womemProduct = await ProductSchema.find({
+            category: `Women's Fashion`
+        });
+
+        if (womemProduct.length === 0) {
+            return res.status(404).json({
+                message: 'No womem products found.'
+            });
+        }
+
+        return res.status(200).json({
+            message: 'women products',
+            womemProduct
+        });
+
+    } catch (error) {
+        res.status(500).json({ message: 'Database error' });
+    }
+});
+
+route.get('/men', async(req, res) => {
+    try {
+        const MenProduct = await ProductSchema.find({
+            category: `Men's Fashion`
+        });
+
+        if (MenProduct.length === 0) {
+            return res.status(404).json({
+                message: 'No men products found.'
+            });
+        }
+
+        return res.status(200).json({
+            message: 'men products',
+            MenProduct
+        });
+
+    } catch (error) {
+        res.status(500).json({ message: 'Database error' });
+    }
+});
+
+route.get('/electronics', async(req, res) => {
+    try {
+        const ElectronicsProduct = await ProductSchema.find({
+            category: `Electronics`
+        });
+
+        if (ElectronicsProduct.length === 0) {
+            return res.status(404).json({
+                message: 'No Electronics products found.'
+            });
+        }
+
+        return res.status(200).json({
+            message: 'electronics products',
+            ElectronicsProduct
+        });
+
+    } catch (error) {
+        res.status(500).json({ message: 'Database error' });
+    }
+});
+
+route.get('/lifestyle', async(req, res) => {
+    try {
+        const ElectronicsProduct = await ProductSchema.find({
+            category: `Home & Lifestyle`
+        });
+
+        if (ElectronicsProduct.length === 0) {
+            return res.status(404).json({
+                message: 'No Lifestyle products found.'
+            });
+        }
+
+        return res.status(200).json({
+            message: 'Lifestyle products',
+            ElectronicsProduct
+        });
+
+    } catch (error) {
+        res.status(500).json({ message: 'Database error' });
+    }
+});
+
+route.get('/toy', async(req, res) => {
+    try {
+        const ToysProduct = await ProductSchema.find({
+            category: `Baby's & Toys`
+        });
+
+        if (ToysProduct.length === 0) {
+            return res.status(404).json({
+                message: 'No Toys products found.'
+            });
+        }
+
+        return res.status(200).json({
+            message: 'Toys products',
+            ToysProduct
+        });
+
+    } catch (error) {
+        res.status(500).json({ message: 'Database error' });
+    }
+});
+
+route.get('/health', async(req, res) => {
+    try {
+        const ToysProduct = await ProductSchema.find({
+            category: `Heath & Beauty`
+        });
+
+        if (ToysProduct.length === 0) {
+            return res.status(404).json({
+                message: 'No Toys products found.'
+            });
+        }
+
+        return res.status(200).json({
+            message: 'Toys products',
+            ToysProduct
+        });
+
+    } catch (error) {
+        res.status(500).json({ message: 'Database error' });
+    }
+});
+
+route.put('/update/:product_id', AdminCheck, uploads.single("image"), async(req, res) => {
+    try {
+        const { product_id } = req.params;
+        const { product_name, category, price, stock } = req.body;
+
+        const newData = {};
+
+        if (product_name) newData.product_name = product_name;
+        if (category) newData.category = category;
+        if (price) newData.price = price;
+        if (stock) newData.stock = stock;
+
+        if (req.file) {
+            newData.image = `/Product_Image/${req.file.filename}`;
+        }
+
+        const product = await ProductSchema.findOneAndUpdate(
+            { product_id: Number(product_id) },
+            { $set: newData },
+            { new: true }
+        );
+
+        if (!product) {
+            return res.status(404).json({
+                message: "Product not found"
+            });
+        }
+
+        res.status(200).json({
+            message: "Product updated successfully",
+            product
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            message: "Database error",
+            error: error.message
+        });
+    }
+});
+
+route.put('/updates/:product_id', async(req, res) => {
+    try {
+        const { product_id } = req.params;
+        const { quality } = req.body;
+
+        if (!req.session.user || !req.session.user.user_id) {
+            return res.status(404).json({
+                message: 'User not logged in'
+            });
+        }
+
+        const user_id = req.session.user.user_id;
+        const user = await userSchema.findOne({ user_id });
+
+        if (!user) {
+            return res.status(404).json({
+                message: 'User not found'
+            });
+        }
+
+        const cartItem = user.cart.find(
+            item => item.product_id === Number(product_id)
+        );
+
+        if (!cartItem) {
+            return res.status(404).json({
+                error: 'Product not found'
+            });
+        }
+
+        cartItem.quality = quality;
+        await user.save();
+
+        return res.status(200).json({
+            message: 'Cart updated successfully',
+            cart: user.cart
+        });
+
+    } catch (error) {
+        console.error("Update Cart Error:", error);
+
+        res.status(500).json({
+            message: "Database error",
+            error: error.message
+        });
+    }
+});
+
+route.delete('/delete/:product_id', AdminCheck, async(req, res) => {
+    try {
+        const { product_id } = req.params;
+
+        const product = await ProductSchema.findOneAndDelete({
+            product_id: product_id
+        });
+
+        if (!product) {
+            return res.status(404).json({
+                message: "Product not found"
+            });
+        }
+
+        res.status(200).json({
+            message: "Product deleted successfully",
+            product
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            message: "Database error",
+            error: error.message
+        });
+    }
+});
+
+route.post('/cart/add/:product_id', async (req, res) => {
+    try {
+        const { product_id } = req.params;
+        const { quality } = req.body;
+
+        if (!req.session.user || !req.session.user.user_id) {
+            return res.status(401).json({
+                message: "User not logged in"
+            });
+        }
+
+        const user_id = req.session.user.user_id;
+        console.log("user session", user_id);
+
+        const user = await userSchema.findOne({ user_id });
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found"
+            });
+        }
+
+        const product = await ProductSchema.findOne({
+            product_id: Number(product_id)
+        });
+
+        if (!product) {
+            return res.status(404).json({
+                message: "Product not found"
+            });
+        }
+
+        product.timesAddedToCart += 1;
+        await product.save();
+
+        const existingItem = user.cart.find(
+            item => item.product_id === Number(product_id)
+        );
+
+        if (existingItem) {
+            existingItem.quality += quality || 1;
+        } else {
+            user.cart.push({
+                product_id: Number(product_id),
+                quality: quality || 1
+            });
+        }
+
+        await user.save();
+
+        res.status(200).json({
+            message: "Product added to cart",
+            cart: user.cart
+        });
+
+    } catch (error) {
+        console.error("Add to Cart Error:", error);
+
+        res.status(500).json({
+            message: "Database error",
+            error: error.message
+        });
+    }
+});
+
+route.get('/cart', async (req, res) => {
+    try {
+        if (!req.session.user) {
+            return res.status(401).json({
+                message: 'Login first'
+            });
+        }
+
+        const user = await userSchema.findOne({
+            user_id: req.session.user.user_id
+        });
+
+        if (!user) {
+            return res.status(404).json({
+                message: 'User not found'
+            });
+        }
+
+        const cartWithDetails = await Promise.all(
+            user.cart.map(async (item) => {
+                const product = await ProductSchema.findOne({
+                    product_id: item.product_id
+                });
+
+                return {
+                    product_id: item.product_id,
+                    quality: item.quality,
+                    product_name: product?.product_name || 'Unknown',
+                    price: product?.price || 0,
+                    image: product?.image || '',
+                };
+            })
+        );
+
+        res.status(200).json({
+            cart: cartWithDetails
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            message: "Database error",
+            error: error.message
+        });
+    }
+});
+
+route.post('/cart/remove', async (req, res) => {
+    try {
+        if (!req.session.user) {
+            return res.status(401).json({
+                message: 'Login first'
+            });
+        }
+
+        const { product_id } = req.body;
+
+        const user = await userSchema.findOne({
+            user_id: req.session.user.user_id
+        });
+
+        if (!user) {
+            return res.status(404).json({
+                message: 'User not found'
+            });
+        }
+
+        user.cart = user.cart.filter(
+            item => item.product_id !== Number(product_id)
+        );
+
+        await user.save();
+
+        res.status(200).json({
+            message: 'Removed from cart',
+            cart: user.cart
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            message: 'Database error',
+            error: error.message
+        });
+    }
+});
+
+route.get('/search', async (req, res) => {
+    try {
+        const { query, category } = req.query;
+
+        let searchFilter = {};
+
+        if (query) {
+            searchFilter.$or = [
+                { product_name: { $regex: query, $options: 'i' } },
+                { category: { $regex: query, $options: 'i' } },
+                { description: { $regex: query, $options: 'i' } },
+            ];
+        }
+
+        if (category) {
+            searchFilter.category = {
+                $regex: category,
+                $options: 'i'
+            };
+        }
+
+        const products = await ProductSchema.find(searchFilter);
+
+        res.status(200).json({
+            message: 'Search result',
+            products,
+            total: products.length,
+        });
+
+    } catch (error) {
+        console.error('Search error:', error);
+
+        res.status(500).json({
+            message: 'Search failed',
+            error: error.message
+        });
+    }
+});
+
+export default route;
