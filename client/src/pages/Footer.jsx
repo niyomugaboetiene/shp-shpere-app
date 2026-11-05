@@ -7,7 +7,7 @@ const Footer = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-10 lg:gap-8">
 
                 <div className="space-y-5 sm:space-y-6 min-w-0">
-                    <h1 className="text-2xl sm:text-3xl font-bold bg-linear-to-r from-green-400 to-green-700 bg-clip-text text-transparent">
+                    <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-green-400 to-green-700 bg-clip-text text-transparent">
                         Shop Sphere
                     </h1>
 
@@ -18,7 +18,7 @@ const Footer = () => {
                             placeholder="Enter your email"
                         />
 
-                        <button className="w-full bg-linear-to-r from-green-500 to-green-600 text-white px-4 sm:px-6 py-3 rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-200 transform hover:scale-105 font-medium shadow-lg text-sm sm:text-base">
+                        <button className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white px-4 sm:px-6 py-3 rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-200 transform hover:scale-105 font-medium shadow-lg text-sm sm:text-base">
                             Subscribe
                         </button>
                     </div>
