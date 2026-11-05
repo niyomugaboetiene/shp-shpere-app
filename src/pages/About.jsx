@@ -240,7 +240,7 @@ const AboutUs = () => {
               </p>
               
               <p className="text-xl leading-relaxed mb-6">
-                Founded in 2024, our mission has been clear: create an e-commerce experience that's 
+                Founded in 2024 by <a href="https://niyomugaboetiene.vercel.app" rel="noopener noreferer" target="_blank" className="hover:underline">NIYOMUGABO Etiene</a>, our mission has been clear: create an e-commerce experience that's 
                 <span className="font-semibold text-gray-900"> intuitive, fast, and beautiful</span>. 
                 Every pixel, every line of code, every product selection is carefully curated to 
                 ensure you have the best possible shopping experience.

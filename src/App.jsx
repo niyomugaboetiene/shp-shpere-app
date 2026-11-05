@@ -22,6 +22,7 @@ import SearchResults from "./pages/SearchBar.jsx";
 import AboutUs from "./pages/About";
 import Contact from "./pages/Contact.jsx";
 import TermsOfUse from "./pages/TermsOfUse.jsx";
+import NotFound from "./pages/NotFound.jsx";
 
 function Layout({ children }) {
   const location = useLocation();
@@ -72,6 +73,8 @@ function App() {
           <Route path="/about" element={<AboutUs />} />
           <Route path="/terms" element={<TermsOfUse />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="*" element={<NotFound />} />
+
         </Routes>
       </Layout>
     </BrowserRouter>
