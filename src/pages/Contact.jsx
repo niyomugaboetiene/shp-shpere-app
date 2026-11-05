@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
-import { FaMapMarkerAlt, FaWhatsapp, FaEnvelope, FaPhoneAlt, FaLinkedin, FaGithub } from "react-icons/fa";
+import {
+  FaMapMarkerAlt,
+  FaWhatsapp,
+  FaEnvelope,
+  FaPhoneAlt,
+  FaLinkedin,
+  FaGithub
+} from "react-icons/fa";
+
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Contact = () => {
@@ -10,6 +18,7 @@ const Contact = () => {
     email: "",
     message: ""
   });
+
   const [submitStatus, setSubmitStatus] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(null);
 
@@ -37,17 +46,17 @@ const Contact = () => {
   return (
     <section
       id="contact"
-      className="min-h-screen w-full px-4 py-12 flex items-center justify-center"
+      className="min-h-screen w-full px-3 sm:px-4 py-8 sm:py-12 flex items-center justify-center"
     >
       <motion.div
-        className="max-w-6xl w-full bg-green-800/70 rounded-xl shadow-lg p-8 md:p-12 grid grid-cols-1 md:grid-cols-2 gap-8"
+        className="max-w-6xl w-full bg-green-800/70 rounded-xl shadow-lg p-4 sm:p-6 md:p-12 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 lg:gap-12"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-      > 
-        <div className="space-y-6">
-          <motion.h2 
-            className="text-4xl font-bold text-green-500 mb-8"
+      >
+        <div className="space-y-6 min-w-0">
+          <motion.h2
+            className="text-3xl sm:text-4xl font-bold text-green-500 mb-6 sm:mb-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
@@ -55,7 +64,7 @@ const Contact = () => {
             Get In <span className="text-white">Touch</span>
           </motion.h2>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -64,14 +73,14 @@ const Contact = () => {
               <label htmlFor="name" className="block mb-2 font-medium text-gray-300">
                 Your Name
               </label>
-              <input 
-                type="text" 
-                name="name" 
-                id="name" 
+              <input
+                type="text"
+                name="name"
+                id="name"
                 value={formData.name}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 rounded-lg bg-gray-900/80 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300"
+                className="w-full min-w-0 px-3 sm:px-4 py-3 rounded-lg bg-gray-900/80 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300 text-sm sm:text-base"
                 placeholder="Enter your name"
                 disabled={isSubmitting}
               />
@@ -85,14 +94,14 @@ const Contact = () => {
               <label htmlFor="email" className="block mb-2 font-medium text-gray-300">
                 Your Email
               </label>
-              <input 
-                type="email" 
-                name="email" 
-                id="email" 
+              <input
+                type="email"
+                name="email"
+                id="email"
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 rounded-lg bg-gray-900/80 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300"
+                className="w-full min-w-0 px-3 sm:px-4 py-3 rounded-lg bg-gray-900/80 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300 text-sm sm:text-base"
                 placeholder="Enter your email"
                 disabled={isSubmitting}
               />
@@ -106,14 +115,14 @@ const Contact = () => {
               <label htmlFor="message" className="block mb-2 font-medium text-gray-300">
                 Your Message
               </label>
-              <textarea 
-                name="message" 
-                id="message" 
+              <textarea
+                name="message"
+                id="message"
                 value={formData.message}
                 onChange={handleChange}
                 rows="5"
                 required
-                className="w-full px-4 py-3 rounded-lg bg-gray-900/80 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300"
+                className="w-full min-w-0 px-3 sm:px-4 py-3 rounded-lg bg-gray-900/80 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300 text-sm sm:text-base resize-y"
                 placeholder="Write your message here..."
                 disabled={isSubmitting}
               />
@@ -122,7 +131,7 @@ const Contact = () => {
             <motion.button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-3 bg-green-600 hover:bg-green-700 rounded-lg text-white font-semibold shadow-lg transition duration-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3 px-4 bg-green-600 hover:bg-green-700 rounded-lg text-white font-semibold shadow-lg transition duration-300 flex items-center justify-center text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.7 }}
@@ -132,7 +141,7 @@ const Contact = () => {
               {isSubmitting ? (
                 <>
                   <svg
-                    className="animate-spin mr-3 h-5 w-5 text-white"
+                    className="animate-spin mr-3 h-5 w-5 text-white shrink-0"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -157,10 +166,10 @@ const Contact = () => {
                 "Send Message"
               )}
             </motion.button>
-            
+
             {submitStatus === "success" && (
               <motion.div
-                className="bg-green-900/50 text-green-100 rounded-lg p-3 text-center mt-4 font-medium"
+                className="bg-green-900/50 text-green-100 rounded-lg p-3 text-center mt-4 font-medium text-sm sm:text-base break-words"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5 }}
@@ -171,7 +180,7 @@ const Contact = () => {
 
             {submitStatus === "error" && (
               <motion.div
-                className="bg-red-900/50 text-red-100 rounded-lg p-3 text-center mt-4 font-medium"
+                className="bg-red-900/50 text-red-100 rounded-lg p-3 text-center mt-4 font-medium text-sm sm:text-base break-words"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5 }}
@@ -182,9 +191,9 @@ const Contact = () => {
           </form>
         </div>
 
-        <div className="flex flex-col justify-center">
-          <motion.h2 
-            className="text-4xl font-bold text-green-500 mb-8"
+        <div className="flex flex-col justify-center min-w-0">
+          <motion.h2
+            className="text-3xl sm:text-4xl font-bold text-green-500 mb-6 sm:mb-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
@@ -192,75 +201,81 @@ const Contact = () => {
             Contact <span className="text-white">Info</span>
           </motion.h2>
 
-          <motion.div 
-            className="space-y-6"
+          <motion.div
+            className="space-y-5 sm:space-y-6"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
           >
-            <div className="flex items-start space-x-4">
-              <div className="p-3 bg-green-600/20 rounded-full">
+            <div className="flex items-start gap-3 sm:gap-4 min-w-0">
+              <div className="p-3 bg-green-600/20 rounded-full shrink-0">
                 <FaMapMarkerAlt className="text-green-400 text-xl" />
               </div>
-              <div>
-                <h3 className="text-xl font-semibold text-white mb-1">Location</h3>
-                <p className="text-gray-300">Bugesera, Rwanda</p>
+              <div className="min-w-0">
+                <h3 className="text-lg sm:text-xl font-semibold text-white mb-1">Location</h3>
+                <p className="text-gray-300 text-sm sm:text-base break-words">Bugesera, Rwanda</p>
               </div>
             </div>
 
-            <div className="flex items-start space-x-4">
-              <div className="p-3 bg-green-600/20 rounded-full">
+            <div className="flex items-start gap-3 sm:gap-4 min-w-0">
+              <div className="p-3 bg-green-600/20 rounded-full shrink-0">
                 <FaEnvelope className="text-green-400 text-xl" />
               </div>
-              <div>
-                <h3 className="text-xl font-semibold text-white mb-1">Email</h3>
-                <p className="text-gray-300">niyomugaboetiene53@gmail.com</p>
+              <div className="min-w-0">
+                <h3 className="text-lg sm:text-xl font-semibold text-white mb-1">Email</h3>
+                <p className="text-gray-300 text-sm sm:text-base break-all">
+                  niyomugaboetiene53@gmail.com
+                </p>
               </div>
             </div>
 
-            <div className="flex items-start space-x-4">
-              <div className="p-3 bg-green-600/20 rounded-full">
+            <div className="flex items-start gap-3 sm:gap-4 min-w-0">
+              <div className="p-3 bg-green-600/20 rounded-full shrink-0">
                 <FaPhoneAlt className="text-green-400 text-xl" />
               </div>
-              <div>
-                <h3 className="text-xl font-semibold text-white mb-1">Phone</h3>
-                <p className="text-gray-300">+250 728 8184 299</p>
+              <div className="min-w-0">
+                <h3 className="text-lg sm:text-xl font-semibold text-white mb-1">Phone</h3>
+                <p className="text-gray-300 text-sm sm:text-base break-words">
+                  +250 728 8184 299
+                </p>
               </div>
             </div>
           </motion.div>
 
-          <motion.div 
-            className="mt-12"
+          <motion.div
+            className="mt-8 sm:mt-12"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.7 }}
           >
-            <h3 className="text-xl font-semibold text-white mb-4">Connect With Us</h3>
-            <div className="flex space-x-4">
-              <a 
-                href="https://linkedin.com" 
-                target="_blank" 
+            <h3 className="text-lg sm:text-xl font-semibold text-white mb-4">
+              Connect With Us
+            </h3>
+            <div className="flex flex-wrap gap-3 sm:gap-4">
+              <a
+                href="https://linkedin.com"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="p-3 bg-gray-700 hover:bg-blue-600 rounded-full transition duration-300"
                 aria-label="LinkedIn"
               >
                 <FaLinkedin className="text-white text-xl" />
               </a>
-              <a 
-                href="https://github.com" 
-                target="_blank" 
+              <a
+                href="https://github.com"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="p-3 bg-gray-700 hover:bg-black rounded-full transition duration-300"
                 aria-label="GitHub"
               >
                 <FaGithub className="text-white text-xl" />
               </a>
-              <a 
-                href="https://wa.me/+250728184299" 
-                target="_blank" 
+              <a
+                href="https://wa.me/+250728184299"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="p-3 bg-gray-700 hover:bg-green-600 rounded-full transition duration-300"
-                aria-label="GitHub"
+                aria-label="WhatsApp"
               >
                 <FaWhatsapp className="text-white text-xl" />
               </a>
