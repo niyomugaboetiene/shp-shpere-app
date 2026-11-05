@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const AddProduct = () => {
@@ -10,13 +11,13 @@ const AddProduct = () => {
     const [stock, setStock] = useState("");
     const [isLoaing, setIsLoading] = useState(false);
     const [error, setError] = useState("");
-    const [success, setSuccess] = useState("")
+    const [success, setSuccess] = useState("");
     const [image, setImage] = useState(null);
     const navigate = useNavigate();
-    
+
     const categories = ["Women's Fashion", "Men's Fashion", "Medecine", "Baby's & Toys", "Home & Lifestyle", "Heath & Beauty", "Electronics"];
 
-    const Add = async() => {
+    const Add = async () => {
         if (!product_name || !category || !price || !stock || !image) {
             alert("All fields are required");
             return;
@@ -28,17 +29,19 @@ const AddProduct = () => {
         formData.append("price", price);
         formData.append("stock", stock);
         formData.append("image", image);
+
         try {
             setIsLoading(true);
             await axios.post(`${VITE_BACKEND_URL}/product/add`, formData, {
                 withCredentials: true,
                 headers: { "Content-Type": "multipart/form-data" },
             });
-            
+
             setSuccess("Product added successfully");
             setTimeout(() => {
                 setSuccess("");
             }, 6000);
+
             setIsLoading(false);
             navigate('/');
 
@@ -52,18 +55,19 @@ const AddProduct = () => {
         } finally {
             setIsLoading(false);
         }
-    }  
-
+    };
 
     return (
-        <div className="flex flex-col items-center justify-center p-9 mt-4">
-            <h1 className="text-center mt-16 text-3xl font-bold mb-12">Add New Product</h1>
+        <div className="flex flex-col items-center justify-center px-4 sm:px-6 md:p-9 mt-4 pb-8">
+            <h1 className="text-center mt-10 sm:mt-16 text-2xl sm:text-3xl font-bold mb-8 sm:mb-12">
+                Add New Product
+            </h1>
 
-            <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md transition-all duration-300">
+            <div className="bg-white p-5 sm:p-8 rounded-2xl shadow-2xl w-full max-w-md transition-all duration-300">
                 <div className="mb-6">
                     <label className="block text-[15px] text-gray-600 mb-2">Product Name</label>
-                    <input 
-                        type="text" 
+                    <input
+                        type="text"
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200"
                         onChange={(e) => setProduct_name(e.target.value)}
                     />
@@ -71,7 +75,7 @@ const AddProduct = () => {
 
                 <div className="mb-6">
                     <label className="block text-[15px] text-gray-600 mb-2">Price</label>
-                    <input 
+                    <input
                         type="number"
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200"
                         onChange={(e) => setPrice(e.target.value)}
@@ -80,7 +84,7 @@ const AddProduct = () => {
 
                 <div className="mb-6">
                     <label className="block text-[15px] text-gray-600 mb-2">Category</label>
-                    <select 
+                    <select
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200"
                         onChange={(e) => setCategory(e.target.value)}
                     >
@@ -93,24 +97,24 @@ const AddProduct = () => {
 
                 <div className="mb-6">
                     <label className="block text-[15px] text-gray-600 mb-2">Numbers in Stock</label>
-                    <input 
-                        type="number"  
+                    <input
+                        type="number"
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200"
                         onChange={(e) => setStock(e.target.value)}
                     />
-                </div>            
+                </div>
 
                 <div className="mb-8">
                     <label className="block text-[15px] text-gray-600 mb-2">Product Image</label>
-                    <input 
-                        type="file"  
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200"
+                    <input
+                        type="file"
+                        className="w-full min-w-0 px-2 sm:px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200 text-sm"
                         onChange={(e) => setImage(e.target.files[0])}
                         accept="image/*"
                     />
                 </div>
 
-                <button 
+                <button
                     onClick={Add}
                     disabled={isLoaing}
                     className="w-full bg-green-500 hover:bg-green-600 px-6 py-3 rounded-lg text-white hover:shadow-lg transition duration-200 disabled:bg-green-300 disabled:cursor-not-allowed"
@@ -119,19 +123,19 @@ const AddProduct = () => {
                 </button>
 
                 {error && (
-                    <div className="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg transition duration-200">
+                    <div className="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg transition duration-200 break-words">
                         {error}
                     </div>
                 )}
 
                 {success && (
-                    <div className="mt-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded-lg transition duration-200">
+                    <div className="mt-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded-lg transition duration-200 break-words">
                         {success}
                     </div>
                 )}
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default AddProduct
+export default AddProduct;
