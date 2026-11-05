@@ -50,6 +50,9 @@ mongoose.connect(process.env.MONGO_URL, {
     console.error(`Error: ${error}`);
 });
 
+app.get('/', async (req, res) => {
+  return res.status(200).json({ message: "I'm alive keep going !!"})
+})
 app.post("/send", async (req, res) => {
   const { name, email, message } = req.body;
 
