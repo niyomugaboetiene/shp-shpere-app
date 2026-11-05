@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const LoginAccount = () => {
@@ -8,11 +9,10 @@ const LoginAccount = () => {
     const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
-    const [success, setSuccess] = useState("")
+    const [success, setSuccess] = useState("");
     const navigate = useNavigate();
 
-    const Login = async() => {
-        // console.log("Name", user_name, "password", password);
+    const Login = async () => {
         if (!user_name || !password) {
             alert("All fields are required");
             return;
@@ -20,16 +20,15 @@ const LoginAccount = () => {
 
         try {
             setIsLoading(true);
-            await axios.post(`${BACKEND_URL}/user/login`,{ user_name, password }, {
+            await axios.post(`${BACKEND_URL}/user/login`, { user_name, password }, {
                 withCredentials: true,
             });
-            
             setSuccess("Login successfully");
             setTimeout(() => {
                 setSuccess("");
             }, 6000);
             setIsLoading(false);
-            navigate("/")
+            navigate("/");
         } catch (error) {
             setError("Error during login");
             setTimeout(() => {
@@ -39,62 +38,68 @@ const LoginAccount = () => {
         } finally {
             setIsLoading(false);
         }
-    }  
-
+    };
 
     return (
-        <div className="flex flex-col items-center justify-center p-9 mt-4">
-            <h1 className="text-center mt-16 text-3xl font-bold mb-12 text-green-500">Login to Your Account</h1>
+        <div className="flex flex-col items-center justify-center px-3 sm:px-6 md:px-9 py-6 sm:py-9 mt-2 sm:mt-4 min-h-[70vh]">
+            <h1 className="text-center mt-6 sm:mt-10 md:mt-16 text-2xl sm:text-3xl font-bold mb-8 sm:mb-10 md:mb-12 text-green-500">
+                Login to Your Account
+            </h1>
 
-            <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md transition-all duration-300">
-                <div className="mb-6">
-                    <label className="block text-[15px] text-gray-600 mb-2">Username</label>
-                    <input 
-                        type="text" 
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200"
+            <div className="bg-white p-5 sm:p-6 md:p-8 rounded-2xl shadow-2xl w-full max-w-md transition-all duration-300">
+                <div className="mb-5 sm:mb-6">
+                    <label className="block text-sm sm:text-[15px] text-gray-600 mb-2">
+                        Username
+                    </label>
+                    <input
+                        type="text"
+                        className="w-full px-3 sm:px-4 py-2.5 sm:py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200"
                         onChange={(e) => setUser_name(e.target.value)}
                         value={user_name}
                     />
                 </div>
 
-                 <div className="mb-8">
-                    <label className="block text-[15px] text-gray-600 mb-2">Password</label>
-                    <input 
+                <div className="mb-6 sm:mb-8">
+                    <label className="block text-sm sm:text-[15px] text-gray-600 mb-2">
+                        Password
+                    </label>
+                    <input
                         type="password"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200"
+                        className="w-full px-3 sm:px-4 py-2.5 sm:py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200"
                         onChange={(e) => setPassword(e.target.value)}
                         value={password}
-                     />
-                 </div>
+                    />
+                </div>
 
-                <button 
+                <button
                     onClick={Login}
                     disabled={isLoading}
-                    className="w-full bg-green-500 hover:bg-green-600 px-6 py-3 rounded-lg text-white hover:shadow-lg transition duration-200 disabled:bg-green-300 disabled:cursor-not-allowed"
+                    className="w-full bg-green-500 hover:bg-green-600 px-4 sm:px-6 py-3 rounded-lg text-sm sm:text-base text-white hover:shadow-lg transition duration-200 disabled:bg-green-300 disabled:cursor-not-allowed"
                 >
                     {isLoading ? "Logging in..." : "Login"}
-                </button>    
-                <button 
+                </button>
+
+                <button
                     onClick={() => navigate('/register')}
-                    className="w-full mt-4 text-green-500 hover:underline transition duration-200 disabled:bg-green-300 disabled:cursor-not-allowed"
+                    className="w-full mt-4 py-2 text-sm sm:text-base text-green-500 hover:underline transition duration-200"
                 >
-                   Create an account
+                    Create an account
                 </button>
 
                 {error && (
-                    <div className="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg transition duration-200">
+                    <div className="mt-4 p-3 text-sm sm:text-base bg-red-100 border border-red-400 text-red-700 rounded-lg transition duration-200 break-words">
                         {error}
                     </div>
                 )}
 
                 {success && (
-                    <div className="mt-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded-lg transition duration-200">
+                    <div className="mt-4 p-3 text-sm sm:text-base bg-green-100 border border-green-400 text-green-700 rounded-lg transition duration-200 break-words">
                         {success}
                     </div>
                 )}
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default LoginAccount
+export default LoginAccount;
