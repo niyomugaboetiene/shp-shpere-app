@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { FaTrash, FaPlus, FaMinus, FaShoppingBag } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const CartPage = () => {
@@ -45,16 +46,15 @@ const CartPage = () => {
 
   const updateQuantity = async (product_id, newQuantity) => {
     if (newQuantity < 1) return;
-    
     try {
       await axios.put(
         `${BACKEND_URL}/product/updates/${product_id}`,
         { quality: newQuantity },
         { withCredentials: true }
       );
-      setCartItems(prev => 
-        prev.map(item => 
-          item.product_id === product_id 
+      setCartItems(prev =>
+        prev.map(item =>
+          item.product_id === product_id
             ? { ...item, quality: newQuantity }
             : item
         )
@@ -69,39 +69,40 @@ const CartPage = () => {
   const totalItems = cartItems.reduce((acc, item) => acc + item.quality, 0);
 
   if (isLoading) return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-green-500"></div>
+    <div className="min-h-screen flex items-center justify-center px-4">
+      <div className="animate-spin rounded-full h-20 w-20 sm:h-32 sm:w-32 border-b-2 border-green-500"></div>
     </div>
   );
 
   if (error) return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md">
-        <p className="text-red-600 text-center">{error}</p>
+    <div className="min-h-screen flex items-center justify-center px-4">
+      <div className="bg-red-50 border border-red-200 rounded-lg p-5 sm:p-6 w-full max-w-md">
+        <p className="text-red-600 text-center text-sm sm:text-base">{error}</p>
       </div>
     </div>
   );
 
   if (cartItems.length === 0) return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="min-h-screen flex items-center justify-center px-4">
       <div className="text-center">
-        <FaShoppingBag className="mx-auto text-6xl text-gray-300 mb-4" />
-        <h2 className="text-2xl font-bold text-gray-600 mb-2">Your cart is empty</h2>
-        <p className="text-gray-500">Start shopping to add items to your cart</p>
+        <FaShoppingBag className="mx-auto text-5xl sm:text-6xl text-gray-300 mb-4" />
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-600 mb-2">Your cart is empty</h2>
+        <p className="text-sm sm:text-base text-gray-500">Start shopping to add items to your cart</p>
       </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Shopping Cart</h1>
-          <p className="text-lg text-gray-600">Review and manage your items</p>
+    <div className="min-h-screen bg-gray-50 py-8 sm:py-12">
+      <div className="max-w-6xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="text-center mb-8 sm:mb-12">
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">Shopping Cart</h1>
+          <p className="text-base sm:text-lg text-gray-600">Review and manage your items</p>
         </div>
 
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-          <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold">
+
+          <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-4 bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold">
             <div className="col-span-5">Product</div>
             <div className="col-span-2 text-center">Price</div>
             <div className="col-span-3 text-center">Quantity</div>
@@ -111,25 +112,28 @@ const CartPage = () => {
 
           <div className="divide-y divide-gray-100">
             {cartItems.map((item) => (
-              <div key={item.product_id} className="grid grid-cols-12 gap-4 items-center px-6 py-6 hover:bg-gray-50 transition-colors duration-200">
-                <div className="col-span-5 flex items-center space-x-4">
+              <div key={item.product_id} className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-4 items-center px-4 sm:px-6 py-5 sm:py-6 hover:bg-gray-50 transition-colors duration-200">
+
+                <div className="md:col-span-5 flex items-center gap-3 sm:gap-4 min-w-0">
                   <img
                     src={`${BACKEND_URL}/${item.image}`}
                     alt={item.product_name}
-                    className="w-20 h-20 object-cover rounded-xl shadow-md"
+                    className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-xl shadow-md flex-shrink-0"
                   />
-                  <div>
-                    <h3 className="font-semibold text-gray-900 text-lg">{item.product_name}</h3>
+                  <div className="min-w-0">
+                    <h3 className="font-semibold text-gray-900 text-base sm:text-lg break-words">{item.product_name}</h3>
                     <p className="text-gray-500 text-sm capitalize">{item.category}</p>
                   </div>
                 </div>
 
-                <div className="col-span-2 text-center">
-                  <span className="text-xl font-bold text-gray-900">${item.price}</span>
+                <div className="md:col-span-2 text-left md:text-center flex justify-between md:block">
+                  <span className="text-sm text-gray-500 md:hidden">Price</span>
+                  <span className="text-lg sm:text-xl font-bold text-gray-900">${item.price}</span>
                 </div>
 
-                <div className="col-span-3 flex justify-center">
-                  <div className="flex items-center space-x-3 bg-gray-100 rounded-full px-4 py-2">
+                <div className="md:col-span-3 flex justify-between md:justify-center items-center">
+                  <span className="text-sm text-gray-500 md:hidden">Quantity</span>
+                  <div className="flex items-center space-x-2 sm:space-x-3 bg-gray-100 rounded-full px-3 sm:px-4 py-2">
                     <button
                       onClick={() => updateQuantity(item.product_id, item.quality - 1)}
                       className="w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-sm hover:bg-gray-50 transition-colors"
@@ -146,13 +150,15 @@ const CartPage = () => {
                   </div>
                 </div>
 
-                <div className="col-span-1 text-center">
+                <div className="md:col-span-1 text-left md:text-center flex justify-between md:block">
+                  <span className="text-sm text-gray-500 md:hidden">Total</span>
                   <span className="text-lg font-bold text-green-600">
                     ${(item.price * item.quality).toFixed(2)}
                   </span>
                 </div>
 
-                <div className="col-span-1 flex justify-center">
+                <div className="md:col-span-1 flex justify-between md:justify-center items-center">
+                  <span className="text-sm text-gray-500 md:hidden">Action</span>
                   <button
                     onClick={() => removeFromCart(item.product_id)}
                     className="w-10 h-10 flex items-center justify-center rounded-full bg-red-50 text-red-500 hover:bg-red-100 transition-colors duration-200 group"
@@ -161,17 +167,18 @@ const CartPage = () => {
                     <FaTrash className="text-sm group-hover:scale-110 transition-transform" />
                   </button>
                 </div>
+
               </div>
             ))}
           </div>
 
-          <div className="border-t border-gray-200 px-6 py-8">
-            <div className="flex justify-between items-center">
+          <div className="border-t border-gray-200 px-4 sm:px-6 py-6 sm:py-8">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-5">
               <div className="text-gray-600">
-                <p className="text-lg">Total items: <span className="font-semibold">{totalItems}</span></p>
+                <p className="text-base sm:text-lg">Total items: <span className="font-semibold">{totalItems}</span></p>
               </div>
-              <div className="text-right">
-                <p className="text-2xl font-bold text-gray-900">
+              <div className="text-left sm:text-right w-full sm:w-auto">
+                <p className="text-xl sm:text-2xl font-bold text-gray-900">
                   Total: <span className="text-green-600">${totalPrice.toFixed(2)}</span>
                 </p>
                 <p className="text-sm text-gray-500 mt-1">Shipping calculated at checkout</p>
@@ -179,13 +186,17 @@ const CartPage = () => {
             </div>
           </div>
 
-          <div className="bg-gray-50 px-6 py-6 border-t border-gray-200">
-            <div className="flex justify-end space-x-4">
-              <button onClick={() => navigate("/")} className="px-8 py-3 border border-gray-300 rounded-full text-gray-700 hover:bg-gray-100 transition-colors duration-200 font-semibold">
+          <div className="bg-gray-50 px-4 sm:px-6 py-5 sm:py-6 border-t border-gray-200">
+            <div className="flex justify-center sm:justify-end">
+              <button
+                onClick={() => navigate("/")}
+                className="w-full sm:w-auto px-6 sm:px-8 py-3 border border-gray-300 rounded-full text-gray-700 hover:bg-gray-100 transition-colors duration-200 font-semibold"
+              >
                 Continue Shopping
               </button>
             </div>
           </div>
+
         </div>
       </div>
     </div>
